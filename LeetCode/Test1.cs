@@ -126,6 +126,9 @@ namespace LeetCode
 
             int answer7 = LongestAbsoluteFilepath.LengthLongestPath("a\n\tb1\n\t\tf1.txt\n\taaaaa\n\t\tf2.txt");
             Assert.IsTrue(answer7 == 14);
+
+            int answer8 = LongestAbsoluteFilepath.LengthLongestPath("a\n\taa\n\t\taaa\n\t\t\tfile1.txt\naaaaaaaaaaaaaaaaaaaaa\n\tsth.png");
+            Assert.IsTrue(answer8 == 29);
         }
     }
 }

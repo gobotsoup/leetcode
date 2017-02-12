@@ -78,18 +78,23 @@ namespace LeetCode
             if (name.Contains(".") == false)
             {
                 directories.Add(n);
-                if (nextPathLevel > pathLevel)
-                {
-                    currParent = n;
-                }
-                if (nextPathLevel < pathLevel && n.Parent != null)
-                {
-                    currParent = n.Parent.Parent;
-                }
             }
             else
             {
                 files.Add(n);
+            }
+
+            if (nextPathLevel > pathLevel)
+            {
+                currParent = n;
+            }
+
+            Node temp = n.Parent;
+            while (nextPathLevel < pathLevel && temp != null)
+            {
+                currParent = temp.Parent;
+                temp = currParent;
+                pathLevel--;
             }
 
             return currParent;
