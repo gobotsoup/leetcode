@@ -131,4 +131,63 @@ namespace LeetCode
             Assert.IsTrue(answer8 == 29);
         }
     }
+
+    [TestClass]
+    public class TestLfuCache
+    {
+        [TestMethod]
+        public void TestLfuCacheFcn()
+        {
+            //["LFUCache","put","put","get","put","get","get","put","get","get","get"]
+            // [[2],      [1,1], [2,2],[1],  [3,3],[2],  [3],  [4,4],[1],  [3], [4]]
+
+            //[null,null,null,1,null,-1,3,null,-1,3,4]
+            var lfuCache = new LFUCache(2);
+            lfuCache.Put(1, 1);
+            lfuCache.Put(2, 2);
+            lfuCache.Get(1);
+            lfuCache.Put(3, 3);
+            lfuCache.Get(2);
+            lfuCache.Get(3);
+            lfuCache.Put(4, 4);
+            lfuCache.Get(1);
+            lfuCache.Get(3);
+            lfuCache.Get(4);
+
+            //    ["LFUCache","put","put","get","get","get","put","put","get","get","get","get"]
+            //      [[3],     [2,2],[1,1],[2],   [1],   [2],[3,3],[4,4], [3],  [2],  [1],  [4]]
+            //[null,null,null,2,1,2,null,null,-1,2,1,4]
+            var lfuCache2 = new LFUCache(3);
+            lfuCache2.Put(2, 2);
+            lfuCache2.Put(1, 1);
+            Assert.IsTrue(lfuCache2.Get(2) == 2);
+            Assert.IsTrue(lfuCache2.Get(1) == 1);
+            Assert.IsTrue(lfuCache2.Get(2) == 2);
+            lfuCache2.Put(3, 3);
+            lfuCache2.Put(4, 4);
+            Assert.IsTrue(lfuCache2.Get(3) == -1);
+            Assert.IsTrue(lfuCache2.Get(2) == 2);
+            Assert.IsTrue(lfuCache2.Get(1) == 1);
+            Assert.IsTrue(lfuCache2.Get(4) == 4);
+
+            //    ["LFUCache","put","put","put","put","get","get","get","get","put","get","get","get","get","get"]
+            //        [[3],    [1,1],[2,2],[3,3],[4,4],[4],  [3],   [2],  [1],[5,5], [1],  [2],  [3],   [4],[5]]
+            //[null,null,null,null,null,4,3,2,-1,null,-1,2,3,-1,5]
+            var lfuCache3 = new LFUCache(3);
+            lfuCache3.Put(1, 1);
+            lfuCache3.Put(2, 2);
+            lfuCache3.Put(3, 3);
+            lfuCache3.Put(4, 4);
+            Assert.IsTrue(lfuCache3.Get(4) == 4);
+            Assert.IsTrue(lfuCache3.Get(3) == 3);
+            Assert.IsTrue(lfuCache3.Get(2) == 2);
+            Assert.IsTrue(lfuCache3.Get(1) == -1);
+            lfuCache3.Put(5, 5);
+            Assert.IsTrue(lfuCache3.Get(1) == -1);
+            Assert.IsTrue(lfuCache3.Get(2) == 2);
+            Assert.IsTrue(lfuCache3.Get(3) == 3);
+            Assert.IsTrue(lfuCache3.Get(4) == -1);
+            Assert.IsTrue(lfuCache3.Get(5) == 5);
+        }
+    }
 }

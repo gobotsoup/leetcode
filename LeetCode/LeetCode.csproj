@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LfuCache.cs" />
     <Compile Include="ListNodeProblems.cs" />
     <Compile Include="LongestAbsoluteFilepath.cs" />
     <Compile Include="Permutation.cs" />
