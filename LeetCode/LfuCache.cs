@@ -11,10 +11,38 @@ namespace LeetCode
         public Node Next { get; set; }
         public Node Prev { get; set; }
         public int Value { get; set; }
+        public int NumUses { get; set; }
 
         public Node(int value)
         {
             Value = value;
+            NumUses = 0;
+        }
+
+        public void SwapNode(Node node)
+        {
+            Node tempNode = new Node(node.Value);
+            tempNode.Next = node.Next;
+            tempNode.Prev = node.Prev;
+
+            if (Prev == node)
+            {
+                node.Prev = this;
+                node.Next = this.Next;
+                this.Prev = tempNode.Prev;
+                this.Next = node;
+            }
+            else if (this.Next == node)
+            {                
+                node.Next = this;
+                node.Prev = this.Prev;
+                this.Next = tempNode.Next;
+                this.Prev = node;
+            }
+            else
+            {
+                throw new InvalidOperationException("Nodes must be sequential");
+            }
         }
     }
 
@@ -27,74 +55,99 @@ namespace LeetCode
         {
             if (_tail == null) return -1;
 
-            if (_tail.Prev != _head)
+            if (_tail.Prev == _head)
             {
-                var temp = _tail;
-                _tail = temp.Prev;
-                int returnValue = temp.Value;
-                temp = null;
+                int returnValue = _tail.Value;
+                _tail = null;
+                _head.Next = null;
                 return returnValue;
             }
             else
             {
-                int returnValue = _tail.Value;
                 var temp = _tail;
                 _tail = temp.Prev;
+                _tail.Next = null;
+                int returnValue = temp.Value;
                 temp = null;
-                return returnValue;
+                return returnValue;                
             }
         }
 
-        public void MoveToFront(int value)
+        public void IncrementUses(int value)
         {
-            var curr = _head;
-            bool found = value == curr.Value;
-            if (found) return;
+            var curr = _tail ?? _head;
 
-            while (curr != null && !found)
+            while (curr.Value != value)
             {
-                curr = curr.Next;
-                if (curr.Value == value)
-                {
-                    found = true;
-
-                    if (curr == _tail)
-                    {
-                        _tail = curr.Prev;
-                    }
-                    break;
-                }
+                curr = curr.Prev;
             }
 
-            if (found)
+            curr.NumUses++;
+
+            // move node up as long as previous has <= usage
+            while(curr.Prev != null && curr.Prev.NumUses <= curr.NumUses) // after swapping 3 with 4, tail.Prev should point to 4 (not 3)
             {
-                var temp = _head;
-                temp.Next = curr.Next;
-                _head = curr;
-                _head.Next = temp;
-                temp.Prev = _head;
+                // swap the previous with the current
+                curr.Prev.SwapNode(curr);
+                if (curr.Next == _head) _head = curr;
+                if (curr == _tail) _tail = curr.Next;
+
+                //check if update _head.Next, or _tail.Prev
+                if (_tail.Prev == curr) _tail.Prev = curr.Next;
+                //if (_head.Next == curr.Prev) _head.Next = curr;
             }
         }
 
         public void Enqueue(int value)
         {
+            var n = new Node(value);
+
             if (_head == null)
             {
-                _head = new Node(value);
+                _head = n;
+                return;
             }
-            else if (_tail == null)
+
+            if (_tail == null)
             {
-                _tail = new Node(value);
-                _tail.Prev = _head;
-                _head.Next = _tail;
+                if (_head.NumUses > 0)
+                {
+                    _tail = n;
+                    _tail.Prev = _head;
+                    _head.Next = _tail;
+                }
+                else
+                {
+                    var t = _head;
+                    _head = n;
+                    _tail = t;
+                    _tail.Prev = _head;
+                    _head.Next = _tail;
+                }
+
+                return;
+            }
+
+            var curr = _tail;
+            while (curr.Prev != null && curr.Prev.NumUses == 0)
+            {
+                curr = curr.Prev;
+            }
+
+            if (curr.NumUses == 0)
+            {
+                n.Next = curr;
+                n.Prev = curr.Prev;
+                curr.Prev = n;
+
+                if (curr == _head) _head = n;
+                if (curr == _tail) _tail = n.Next;
             }
             else
             {
-                var n = new Node(value);
-                var temp = _tail;
-                temp.Next = n;
-                _tail = n;
-                _tail.Prev = temp;
+                n.Prev = curr;
+                curr.Next = n;
+                if (curr == _tail) _tail = n;
             }
         }
     }
@@ -120,7 +173,7 @@ namespace LeetCode
             if (_internalDict.ContainsKey(key))
             {
                 // add this element to the top of the queue as most recent used
-                _queue.MoveToFront(key);
+                _queue.IncrementUses(key);
                 int val = _internalDict[key];
                 Console.WriteLine("Get Found: {0} for: {1}", val, key);
                 return val;
@@ -134,22 +187,15 @@ namespace LeetCode
 
         public void Put(int key, int value)
         {
-            // check if dict is at capacity, if so remove the least recently used
+            if (_internalDict.ContainsKey(key)) return;
             if (_internalDict.Count == _capacity)
             {
                 int remove = _queue.Dequeue();
-                Console.WriteLine("Att capacity removing: {0}", remove);
                 _internalDict.Remove(remove);
             }
 
-            // add to the tail of the list
             _queue.Enqueue(key);
-
-            if (!_internalDict.ContainsKey(key) && _internalDict.Count < _capacity)
-            {
-                _internalDict.Add(key, value);
-            }
-            Console.WriteLine("Put: {0}", value);
+            _internalDict.Add(key, value);
         }
     }
 

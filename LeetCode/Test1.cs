@@ -145,14 +145,14 @@ namespace LeetCode
             var lfuCache = new LFUCache(2);
             lfuCache.Put(1, 1);
             lfuCache.Put(2, 2);
-            lfuCache.Get(1);
+            Assert.IsTrue(lfuCache.Get(1) == 1);
             lfuCache.Put(3, 3);
-            lfuCache.Get(2);
-            lfuCache.Get(3);
+            Assert.IsTrue(lfuCache.Get(2) == -1);
+            Assert.IsTrue(lfuCache.Get(3) == 3);
             lfuCache.Put(4, 4);
-            lfuCache.Get(1);
-            lfuCache.Get(3);
-            lfuCache.Get(4);
+            Assert.IsTrue(lfuCache.Get(1) == -1);
+            Assert.IsTrue(lfuCache.Get(3) == 3);
+            Assert.IsTrue(lfuCache.Get(4) == 4);
 
             //    ["LFUCache","put","put","get","get","get","put","put","get","get","get","get"]
             //      [[3],     [2,2],[1,1],[2],   [1],   [2],[3,3],[4,4], [3],  [2],  [1],  [4]]
@@ -183,7 +183,7 @@ namespace LeetCode
             Assert.IsTrue(lfuCache3.Get(2) == 2);
             Assert.IsTrue(lfuCache3.Get(1) == -1);
             lfuCache3.Put(5, 5);
-            Assert.IsTrue(lfuCache3.Get(1) == -1);
+            Assert.IsTrue(lfuCache3.Get(1) == -1); 
             Assert.IsTrue(lfuCache3.Get(2) == 2);
             Assert.IsTrue(lfuCache3.Get(3) == 3);
             Assert.IsTrue(lfuCache3.Get(4) == -1);
