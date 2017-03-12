@@ -60,9 +60,13 @@ namespace LeetCode
             {
                 int uses = _usageDict[key];
                 _usageQueue[uses].Remove(key);
-                _usageQueue[1].AddFirst(key);
                 _internalDict[key] = value;
-                _usageDict[key] = 1;
+                _usageDict[key] = uses + 1;
+                if (!_usageQueue.ContainsKey(uses + 1))
+                {
+                    _usageQueue[uses + 1] = new LinkedList<int>();
+                }
+                _usageQueue[uses + 1].AddFirst(key);
                 return;
             }
             if (_internalDict.Count == _capacity)
