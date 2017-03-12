@@ -93,6 +93,8 @@ namespace LeetCode
 
         private int GetLowestUsage()
         {
+            if (_usageQueue.ContainsKey(1) && _usageQueue[1].Count > 0) return 1;
+            if (_usageQueue.ContainsKey(2) && _usageQueue[2].Count > 0) return 2;
             return _usageDict.OrderBy(x => x.Value).First().Value;
         }
     }
