@@ -6,164 +6,20 @@ using System.Threading.Tasks;
 
 namespace LeetCode
 {
-    public class Node
-    {
-        public Node Next { get; set; }
-        public Node Prev { get; set; }
-        public int Value { get; set; }
-        public int NumUses { get; set; }
-
-        public Node(int value)
-        {
-            Value = value;
-            NumUses = 0;
-        }
-
-        public void SwapNode(Node node)
-        {
-            Node tempNode = new Node(node.Value);
-            tempNode.Next = node.Next;
-            tempNode.Prev = node.Prev;
-
-            if (Prev == node)
-            {
-                node.Prev = this;
-                node.Next = this.Next;
-                this.Prev = tempNode.Prev;
-                this.Next = node;
-            }
-            else if (this.Next == node)
-            {                
-                node.Next = this;
-                node.Prev = this.Prev;
-                this.Next = tempNode.Next;
-                this.Prev = node;
-            }
-            else
-            {
-                throw new InvalidOperationException("Nodes must be sequential");
-            }
-        }
-    }
-
-    public class Queue
-    {
-        private Node _head;
-        private Node _tail;
-
-        public int Dequeue()
-        {
-            if (_tail == null) return -1;
-
-            if (_tail.Prev == _head)
-            {
-                int returnValue = _tail.Value;
-                _tail = null;
-                _head.Next = null;
-                return returnValue;
-            }
-            else
-            {
-                var temp = _tail;
-                _tail = temp.Prev;
-                _tail.Next = null;
-                int returnValue = temp.Value;
-                temp = null;
-                return returnValue;                
-            }
-        }
-
-        public void IncrementUses(int value)
-        {
-            var curr = _tail ?? _head;
-
-            while (curr.Value != value)
-            {
-                curr = curr.Prev;
-            }
-
-            curr.NumUses++;
-
-            // move node up as long as previous has <= usage
-            while(curr.Prev != null && curr.Prev.NumUses <= curr.NumUses) // after swapping 3 with 4, tail.Prev should point to 4 (not 3)
-            {
-                // swap the previous with the current
-                curr.Prev.SwapNode(curr);
-                if (curr.Next == _head) _head = curr;
-                if (curr == _tail) _tail = curr.Next;
-
-                //check if update _head.Next, or _tail.Prev
-                if (_tail.Prev == curr) _tail.Prev = curr.Next;
-                //if (_head.Next == curr.Prev) _head.Next = curr;
-            }
-        }
-
-        public void Enqueue(int value)
-        {
-            var n = new Node(value);
-
-            if (_head == null)
-            {
-                _head = n;
-                return;
-            }
-
-            if (_tail == null)
-            {
-                if (_head.NumUses > 0)
-                {
-                    _tail = n;
-                    _tail.Prev = _head;
-                    _head.Next = _tail;
-                }
-                else
-                {
-                    var t = _head;
-                    _head = n;
-                    _tail = t;
-                    _tail.Prev = _head;
-                    _head.Next = _tail;
-                }
-
-                return;
-            }
-
-            var curr = _tail;
-            while (curr.Prev != null && curr.Prev.NumUses == 0)
-            {
-                curr = curr.Prev;
-            }
-
-            if (curr.NumUses == 0)
-            {
-                n.Next = curr;
-                n.Prev = curr.Prev;
-                curr.Prev = n;
-
-                if (curr == _head) _head = n;
-                if (curr == _tail) _tail = n.Next;
-            }
-            else
-            {
-                n.Prev = curr;
-                curr.Next = n;
-                if (curr == _tail) _tail = n;
-            }
-        }
-    }
-
     public class LFUCache
     {
 
         private Dictionary<int, int> _internalDict;
-        private Queue _queue;
+        private Dictionary<int, LinkedList<int>> _usageQueue;
+        private Dictionary<int, int> _usageDict;
         private int _capacity;
 
         public LFUCache(int capacity)
         {
 
             _internalDict = new Dictionary<int, int>();
-            _queue = new Queue();
+            _usageQueue = new Dictionary<int, LinkedList<int>>(); // key is the number of uses, with queue of most recently used values
+            _usageDict = new Dictionary<int, int>();
             _capacity = capacity;
         }
 
@@ -172,8 +28,19 @@ namespace LeetCode
             // check the Dictionary to find the value, if not found return -1
             if (_internalDict.ContainsKey(key))
             {
-                // add this element to the top of the queue as most recent used
-                _queue.IncrementUses(key);
+                int uses = _usageDict[key] + 1;
+                _usageQueue[uses - 1].Remove(key);
+                if (_usageQueue.ContainsKey(uses))
+                {
+                    LinkedList<int> usageQ = _usageQueue[uses];
+                    usageQ.AddFirst(key);
+                }
+                else
+                {
+                    _usageQueue[uses] = new LinkedList<int>();
+                    _usageQueue[uses].AddFirst(key);
+                }
+                _usageDict[key] += 1;
                 int val = _internalDict[key];
                 Console.WriteLine("Get Found: {0} for: {1}", val, key);
                 return val;
@@ -187,15 +54,42 @@ namespace LeetCode
 
         public void Put(int key, int value)
         {
-            if (_internalDict.ContainsKey(key)) return;
+            if (_capacity <= 0) return;
+
+            if (_internalDict.ContainsKey(key))
+            {
+                int uses = _usageDict[key];
+                _usageQueue[uses].Remove(key);
+                _usageQueue[1].AddFirst(key);
+                _internalDict[key] = value;
+                _usageDict[key] = 1;
+                return;
+            }
             if (_internalDict.Count == _capacity)
             {
-                int remove = _queue.Dequeue();
-                _internalDict.Remove(remove);
+                var q = _usageQueue[GetLowestUsage()];
+                _internalDict.Remove(q.Last.Value);
+                _usageDict.Remove(q.Last.Value);
+                q.Remove(q.Last);
             }
 
-            _queue.Enqueue(key);
+            if (_usageQueue.ContainsKey(1))
+            {
+                var firstUseQ = _usageQueue[1];
+                firstUseQ.AddFirst(key);
+            }
+            else
+            {
+                _usageQueue[1] = new LinkedList<int>();
+                _usageQueue[1].AddFirst(key);
+            }
+            _usageDict[key] = 1;
             _internalDict.Add(key, value);
+        }
+
+        private int GetLowestUsage()
+        {
+            return _usageDict.OrderBy(x => x.Value).First().Value;
         }
     }
 
