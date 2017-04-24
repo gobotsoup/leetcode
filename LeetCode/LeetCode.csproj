@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoinChange2.cs" />
     <Compile Include="LfuCache.cs" />
     <Compile Include="ListNodeProblems.cs" />
     <Compile Include="LongestAbsoluteFilepath.cs" />
+    <Compile Include="MinimumGeneticMutation.cs" />
     <Compile Include="Permutation.cs" />
     <Compile Include="PhoneNumberCombos.cs" />
     <Compile Include="Program.cs" />

@@ -101,6 +101,18 @@ namespace LeetCode
     }
 
     [TestClass]
+    public class TestCoinChange2
+    {
+        [TestMethod]
+        public void TestGetNumChangeCombos()
+        {
+            int[] coins = { 1, 2, 5 };
+            int result = CoinChange2.Change(5, coins);
+            Assert.IsTrue(result == 4);
+        }
+    }
+
+    [TestClass]
     public class TestAbsoluteFilepath
     {
         [TestMethod]
