@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayNesting.cs" />
     <Compile Include="CoinChange2.cs" />
     <Compile Include="LfuCache.cs" />
     <Compile Include="ListNodeProblems.cs" />
