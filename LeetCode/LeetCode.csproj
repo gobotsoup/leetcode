@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ArrayNesting.cs" />
     <Compile Include="CoinChange2.cs" />
+    <Compile Include="ContainerWithMostWater.cs" />
     <Compile Include="LfuCache.cs" />
     <Compile Include="ListNodeProblems.cs" />
     <Compile Include="LongestAbsoluteFilepath.cs" />
