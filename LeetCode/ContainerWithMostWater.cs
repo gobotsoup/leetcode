@@ -10,15 +10,16 @@ namespace LeetCode
     {
         public int MaxArea(int[] height)
         {
-
             int maxArea = 0;
-            for (int i = 0; i < height.Length; i++)
+            int left = 0;
+            int right = height.Length - 1;
+
+            while (right > left)
             {
-                for (int j = i + 1; j < height.Length; j++)
-                {
-                    int area = GetAreaForPoints(height[i], height[j], i, j);
-                    if (area > maxArea) maxArea = area;
-                }
+                int area = GetAreaForPoints(height[left], height[right], left, right);
+                if (area > maxArea) maxArea = area;
+                if (height[right] > height[left]) left++;
+                else right--;
             }
 
             return maxArea;
