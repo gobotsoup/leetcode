@@ -8,6 +8,33 @@ using System.Threading.Tasks;
 namespace LeetCode
 {
     [TestClass]
+    public class TestIntegerToWords
+    {
+        [TestMethod]
+        public void TestChangeIntegerToWords()
+        { 
+            var intToWords = new IntegerToEnglishWords();
+            var thousandAndOne = intToWords.NumberToWords(1001);
+            var hundredMillionOne = intToWords.NumberToWords(100000001);
+            var fiftyThousandSixtyEight = intToWords.NumberToWords(50868);
+            var zero = intToWords.NumberToWords(0);
+            var oneThousand = intToWords.NumberToWords(1000);
+            var tenThousand = intToWords.NumberToWords(10000);
+            var hundredMillion = intToWords.NumberToWords(100000000);
+            var nineHundredMillion = intToWords.NumberToWords(900000000);
+            var dead = intToWords.NumberToWords(100000);
+
+            var billion = intToWords.NumberToWords(2147483647);
+            var answer = intToWords.NumberToWords(1237);
+            var answer2 = intToWords.NumberToWords(12);
+            var answer3 = intToWords.NumberToWords(110);
+            var answer4 = intToWords.NumberToWords(101);
+
+
+            Assert.IsTrue(answer.ToUpper() == "ONE THOUSAND TWO HUNDRED THIRTY SEVEN");
+        }
+    }
+    [TestClass]
     public class TestContainerWithMostWater
     {
         [TestMethod]
