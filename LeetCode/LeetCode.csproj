@@ -48,6 +48,7 @@
     <Compile Include="CoinChange2.cs" />
     <Compile Include="ContainerWithMostWater.cs" />
     <Compile Include="IntegerToEnglishWords.cs" />
+    <Compile Include="LargestNumber.cs" />
     <Compile Include="LfuCache.cs" />
     <Compile Include="ListNodeProblems.cs" />
     <Compile Include="LongestAbsoluteFilepath.cs" />

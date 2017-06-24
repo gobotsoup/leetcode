@@ -8,6 +8,19 @@ using System.Threading.Tasks;
 namespace LeetCode
 {
     [TestClass]
+    public class TestLargestNumberProblem
+    {
+        [TestMethod]
+        public void TestGetLargestNumber()
+        {
+            var ln = new LargestNumberProblem();
+            //[812,7,9] 
+            int[] vals = new int[] { 121, 12};
+            var answer = ln.LargestNumber(vals);
+            vals = new int[] { 1, 999 };
+        }
+    }
+    [TestClass]
     public class TestIntegerToWords
     {
         [TestMethod]
