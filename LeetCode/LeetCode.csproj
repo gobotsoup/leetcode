@@ -60,6 +60,7 @@
     <Compile Include="RomanNumerals.cs" />
     <Compile Include="SearchForRange.cs" />
     <Compile Include="Test1.cs" />
+    <Compile Include="Trie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

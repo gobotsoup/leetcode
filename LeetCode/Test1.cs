@@ -8,6 +8,44 @@ using System.Threading.Tasks;
 namespace LeetCode
 {
     [TestClass]
+    public class TrieTest
+    {
+        [TestMethod]
+        public void TestTrie()
+        {
+            Trie t = new Trie();
+            t.Insert("abc");
+            bool there = t.Search("abc");
+
+            //            Input:
+            //["Trie", "insert", "search", "search", "search", "startsWith", "startsWith", "startsWith"]
+            //[[],      ["hello"],["hell"],["helloa"],["hello"],["hell"],        ["helloa"],["hello"]]
+            //Output:
+            //   [null,   null,      false,   false,    true,         false,       false,      false]
+            //        Expected:
+            //  [null,    null,     false,    false,    true,          true,       false,     true]
+            Trie t2 = new Trie();
+            t2.Insert("hello");
+            Assert.IsTrue(t2.Search("hell") == false);
+            Assert.IsTrue(t2.StartsWith("hell") == true);
+
+
+            //            Input:
+            //["Trie", "insert", "search", "search", "insert", "search", "insert", "search"]
+            //[[],    ["abc"],   ["abc"],  ["ab"],   ["ab"],   ["ab"],   ["ab"],   ["ab"]]
+            //Output:
+            //[null,    null,       true,    false,     null,     false,   null,     false]
+            //        Expected:
+            //[null,   null,        true,     false,    null,     true,    null,     true]
+            Trie t3 = new Trie();
+            t3.Insert("abc");
+            Assert.IsTrue(t3.Search("abc") == true);
+            Assert.IsTrue(t3.Search("ab") == false);
+            t3.Insert("ab");
+            Assert.IsTrue(t3.Search("ab") == true);
+        }
+    }
+    [TestClass]
     public class TestLargestNumberProblem
     {
         [TestMethod]
