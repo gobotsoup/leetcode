@@ -8,6 +8,17 @@ using System.Threading.Tasks;
 namespace LeetCode
 {
     [TestClass]
+    public class UniqueBstTest
+    {
+        [TestMethod]
+        public void TestUniqueBst()
+        {
+            var ub = new UniqueBst();
+            int result = ub.NumTrees(3);
+            Assert.AreEqual(5, result);
+        }
+    }
+    [TestClass]
     public class TrieTest
     {
         [TestMethod]
