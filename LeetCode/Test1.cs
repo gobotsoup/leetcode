@@ -8,6 +8,19 @@ using System.Threading.Tasks;
 namespace LeetCode
 {
     [TestClass]
+    public class RadixSortTest
+    {
+        [TestMethod]
+        public void TestRadixSort()
+        {
+            var r = new RadixSort();
+            // sort numbers less than one byte
+            var nums = new int[] { 34, 255, 56 };
+            var result = r.SortNumbers(nums);
+            Assert.IsTrue(result[0] == 34 && result[1] == 56 && result[2] == 255);
+        }
+    }
+    [TestClass]
     public class UniqueBstTest
     {
         [TestMethod]
