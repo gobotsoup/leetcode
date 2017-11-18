@@ -58,6 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadixSort.cs" />
+    <Compile Include="ReconstructItinerary.cs" />
     <Compile Include="RomanNumerals.cs" />
     <Compile Include="SearchForRange.cs" />
     <Compile Include="Test1.cs" />

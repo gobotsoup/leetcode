@@ -8,6 +8,20 @@ using System.Threading.Tasks;
 namespace LeetCode
 {
     [TestClass]
+    public class ReconstructItineraryTest
+    {
+        [TestMethod]
+        public void TestReconstructItinerary()
+        {
+            //[["JFK","AAA"],["AAA","JFK"],["JFK","BBB"],["JFK","CCC"],["CCC","JFK"]]
+            var ri = new ReconstructItinerary();
+            var result = ri.FindItinerary(new string[,] { { "JFK", "AAA" }, { "AAA", "JFK" }, { "JFK", "BBB" }, { "JFK", "CCC" }, { "CCC", "JFK" } });
+
+            //[["EZE","AXA"],["TIA","ANU"],["ANU","JFK"],["JFK","ANU"],["ANU","EZE"],["TIA","ANU"],["AXA","TIA"],["TIA","JFK"],["ANU","TIA"],["JFK","TIA"]]
+        }
+    }
+
+    [TestClass]
     public class RadixSortTest
     {
         [TestMethod]
