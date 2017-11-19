@@ -52,6 +52,7 @@
     <Compile Include="LfuCache.cs" />
     <Compile Include="ListNodeProblems.cs" />
     <Compile Include="LongestAbsoluteFilepath.cs" />
+    <Compile Include="MaximumSubArray.cs" />
     <Compile Include="MinimumGeneticMutation.cs" />
     <Compile Include="Permutation.cs" />
     <Compile Include="PhoneNumberCombos.cs" />
