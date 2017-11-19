@@ -61,6 +61,7 @@
     <Compile Include="ReconstructItinerary.cs" />
     <Compile Include="RomanNumerals.cs" />
     <Compile Include="SearchForRange.cs" />
+    <Compile Include="SingleNumberV3.cs" />
     <Compile Include="Test1.cs" />
     <Compile Include="Trie.cs" />
     <Compile Include="UniqueBst.cs" />
